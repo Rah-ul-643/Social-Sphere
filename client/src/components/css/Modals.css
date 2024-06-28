@@ -1,0 +1,7 @@
+.overlay-container{
+    color: black;
+    position: absolute;
+    z-index: 200;
+    align-self: center;
+    justify-self: center;
+}

@@ -1,0 +1,32 @@
+
+.Message-Input-Bar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.Message-Input-Bar input[type="text"] {
+    color: black;   
+    flex-grow: 1;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #dddddd;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    outline: none;
+}
+
+.no-cursor{
+    pointer-events: none;
+}
+
+.Message-Input-Bar button {
+    padding: 5px 20px;
+    font-size: 20px;
+    cursor: pointer;
+    background-color: rgb(225, 0, 255);
+    color: rgb(0, 0, 0);
+    border: none;
+    border-bottom-right-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+

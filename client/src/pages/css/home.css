@@ -1,0 +1,51 @@
+.Home{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    color: white;
+}
+
+.Modal{
+    position: absolute;
+    z-index: 100;
+    align-self: center;
+    justify-self: center;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    backdrop-filter: blur(20px);
+}
+
+.Loader{
+    align-items: center;
+    align-content: center;    
+}
+
+.ChatLoaderImg{
+    height: 50px;
+    width: 50px;
+}
+
+.Conversation-Section{
+    width: 30%;
+    height: 100%;
+    transition: all 0.5s ease-in-out;
+    margin-right: 1rem;
+}
+
+
+.slide-in{
+    transform: scale(1);
+    opacity: 1;
+}
+
+.slide-out{
+    transform: scale(0);
+    width: 0;
+    opacity: 0;
+}
+
+.Chat-Section {
+    width: 100%;
+    height: 100%;
+}

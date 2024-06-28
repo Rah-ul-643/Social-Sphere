@@ -1,0 +1,111 @@
+.view-group{
+    width: 75%;
+    height: 75%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    color: white;
+    background-color: black;
+    border-radius: 1rem;
+}
+
+.view-group section{
+    width: 50%;
+    padding: 1rem 2rem;
+    border-right: 2px rgb(255, 255, 255) solid;
+    height: 100%;
+}
+.view-group section:last-child{
+    border: none;
+}
+
+.view-group h1{
+    font-size: 2rem;
+    text-align: center;
+    margin: 2rem;
+
+}
+
+.view-group ul{
+    overflow-y: scroll;
+    width: 100%;
+    list-style: none;
+    text-wrap: wrap;
+    flex-grow: 1;
+}
+
+.join-requests-list{
+    max-height: 50%;
+    height: 50%;
+}
+.participants-list{
+    max-height: 70%;
+}
+
+.view-group ul p{
+    text-align: center;
+}
+
+.view-group ul::-webkit-scrollbar {
+    display: none;
+}
+
+.view-group li{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;  
+    font-weight: bold;
+    border-bottom: rgb(255, 255, 255) solid 1px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.view-group li:hover{
+    background-color:rgb(58, 58, 58);
+}
+
+.list-name{
+    display: flex;
+    align-items: center;
+}
+
+.view-group h2{
+    font-size: 1.2rem;
+    margin: 0 10px;
+}
+
+.request-button-tab button{
+    font-size: 24px;
+    margin: 0 10px;
+}
+.accept, .online{
+    color: rgb(4, 188, 4);
+}
+
+.reject, .offline{
+    color: rgb(255, 0, 0);
+}
+
+h4{
+    color: yellow;
+}
+
+.leave-group{
+    padding: 1rem;
+    color: rgb(255, 0, 0);
+    border-top: 1px white solid;
+    text-align: center;
+}
+
+.leave-group button{
+    border-radius: 10px;
+    padding: 10px;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.leave-group button:hover{
+    background-color: rgb(195, 6, 6);
+    color: rgb(255, 255, 255);
+}

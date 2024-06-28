@@ -1,0 +1,55 @@
+.Chat-Content {
+    display: flex;
+    flex-direction: column;
+    height: 75%;
+    background-image: linear-gradient(to top, black, rgb(88, 87, 87));
+    list-style: none;
+    padding: 2rem;
+    margin: 1rem 0;
+    border-radius: 1rem;
+    overflow-y: scroll;
+}
+
+.Chat-Content::-webkit-scrollbar {
+    display: none;
+}
+
+.Chat-Content li {
+    padding: 10px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    word-break: break-word;
+    max-width: 50%;
+}
+
+.receiver-message {
+    color: black;
+    text-align: left;
+    background-color: #ffffff;
+    align-self: flex-start;
+}
+
+.sender-message {
+    color: white;
+    text-align: right;
+    background-color: rgb(225, 0, 255);
+    align-self: flex-end;
+}
+
+.Empty-Chats{   
+    margin: auto;
+    text-align: center;
+}
+
+.Empty-Chats h1{
+    font-size: 3rem;
+    font-weight: bolder;
+    margin: 2rem;
+}
+
+.Chat-Content h3{
+    font-size: 16px;
+    font-weight: bold;
+    color: rgb(35, 251, 20);
+}

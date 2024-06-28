@@ -1,0 +1,39 @@
+.Chat-List{
+    background-image: linear-gradient(to top, black,rgb(16, 16, 16), rgb(102, 102, 102));
+    height: 85%;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;  
+    margin: 1rem 0;
+    border-radius: 1rem;
+    overflow-y: scroll;
+}
+
+.Chat-List::-webkit-scrollbar {
+    display: none;
+}
+
+.Chat-List li{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 48px;
+    margin: 12px 24px;
+    padding: 12px;
+    cursor: pointer;
+    border-bottom: rgb(225, 0, 255) solid 1px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.Chat-List li:hover{
+    background-color:rgb(56, 56, 56);
+}
+
+.Chat-List li h2{
+    color: white;
+    font-size: 1rem;
+    font-weight: bolder;
+}
+
+
