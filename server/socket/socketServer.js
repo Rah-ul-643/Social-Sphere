@@ -4,7 +4,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const secretKey = 'your-secret-key';        // change and import from .env
+const secretKey = process.env.JWT_SECRET_KEY; 
 
 const { handleConnectionRequest, handleSendMessageEvent, setUserId, getUsers, disconnectionHandler } = require('../controllers/socketController');
 

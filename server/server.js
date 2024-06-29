@@ -11,12 +11,12 @@ const chatRoutes = require('./api routes/chatRoutes');
 const connectDB = require('./config/database');
 const {server,app} = require('./socket/socketServer');
 
+const auth = require('./middlewares/auth');
 
 // middlewares
 
-// setup an auth middleware
 
-app.use(cookie_parser());
+app.use(cookie_parser());   
 app.use(express.json());    // json parser
 
 
@@ -33,7 +33,7 @@ app.use(cors({              // cors middleware
 
 
 app.use('/api/user/', userRoutes);
-app.use('/api/chat/', chatRoutes);
+app.use('/api/chat/', auth, chatRoutes);
 
 
 // server event listener setup

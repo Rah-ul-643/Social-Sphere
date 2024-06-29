@@ -2,7 +2,7 @@ const bcrypt= require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const users = require('../models/users');
-const secretKey = 'your-secret-key';            //  add to .env
+const secretKey = process.env.JWT_SECRET_KEY; 
 
 const loginController = async (req, res) => {
     const { username, password } = req.body;
