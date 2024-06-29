@@ -14,8 +14,12 @@ const loginController = async (req, res) => {
                 console.log("authenticted");
                 const token = jwt.sign({ username }, secretKey, { expiresIn: '1h' });
                 res.cookie('token', token,
-                    {httpOnly: true,
-                    sameSite: 'strict' }
+                    {
+                        httpOnly: true,
+                        sameSite: 'strict',
+                        maxAge: 60 * 60 * 1000,
+                        secure: process.env.NODE_ENV === 'production',
+                    }
                 );
                 res.json({ token: token, success: true, message: "Logged in successfully" });
             }
