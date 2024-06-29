@@ -16,10 +16,8 @@ const loginController = async (req, res) => {
                 res.cookie('token', token,
                     {
                         httpOnly: true,
-                        sameSite: 'strict',
                         maxAge: 60 * 60 * 1000,
                         secure: process.env.NODE_ENV === 'production',
-                        path: '/',
                     }
                 );
                 res.json({ token: token, success: true, message: "Logged in successfully" });
