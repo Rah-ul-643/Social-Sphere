@@ -1,7 +1,10 @@
 const http = require('http');
 const socketIo = require('socket.io');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
+
+const secretKey = 'your-secret-key';        // change and import from .env
 
 const { handleConnectionRequest, handleSendMessageEvent, setUserId, getUsers, disconnectionHandler } = require('../controllers/socketController');
 
@@ -18,25 +21,43 @@ const io = socketIo(server, {
     },
 });
 
-io.on('connection', (socket) => {
-    console.log('User connected with id: ' + socket.id);
+io.use((socket, next) => {
+    const token = socket.handshake.query.token;
+    if (!token) {
+        console.log("authentication error");
+        return next(new Error('Authentication error'));
+    }
 
-    socket.on('setUserId', (username) => {
-        setUserId(io,socket, username)
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+            console.log("invalid token");
+            return next(new Error('Authentication error'));
+        }
+        socket.user = decoded.username; 
+        next();
     });
+});
 
-    socket.on('getUsers', (username,cb) => {
-        getUsers( username, cb);
+
+io.on('connection', (socket) => {
+    
+    console.log(`User connected with id: ${socket.id} , username: ${socket.user}`);
+
+    io.to(socket.id).emit('set-username',socket.user);
+
+    setUserId(io, socket);
+
+    socket.on('getUsers', (cb) => {
+        getUsers( socket.user, cb);
     })
 
-    socket.on('connection-request', (groupId, cb) => {
+    socket.on('group-conversation', (groupId, cb) => {
         handleConnectionRequest(groupId, cb, socket);
     });
 
-    socket.on('send-msg', (msg, sender, groupId ) => {
-        handleSendMessageEvent(msg, sender, groupId, socket);
+    socket.on('send-msg', (msg, groupId ) => {
+        handleSendMessageEvent(msg, socket.user, groupId, io);
     });
-
     
     socket.on('disconnect', () => {
         disconnectionHandler(io,socket)

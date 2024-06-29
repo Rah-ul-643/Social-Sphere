@@ -1,31 +1,32 @@
 import React, { useState } from 'react'
-import { api } from '../apis';
+import { chatApi } from '../apis';
 import toast from 'react-hot-toast';
 
-const AddParticipantModal = ({setAddParticipantModalOpen, activeGroup}) => {
+const AddParticipantModal = ({ setAddParticipantModalOpen, activeGroup }) => {
 
     const [inputUserName, setInptUserName] = useState('');
-    
+
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
         try {
             const body = { username: inputUserName, groupId: activeGroup.group_id }
-            const response = await api.post('/add-participant', body);
+            const response = await chatApi.post('/add-participant', body);
             const data = response.data;
             console.log(data.success);
             if (data.success) {
                 toast.success("User added to group.");
                 setAddParticipantModalOpen(false);
             }
-            else{
+            else {
                 toast.error(data.message);
             }
-            
+
         } catch (error) {
             console.log(error);
-            toast.error('Unable to process request!');
+            localStorage.clear();
+            window.location.reload();
         }
 
     }

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+const cookie_parser = require('cookie-parser');
 
 const CLIENT_URL = process.env.CLIENT_URL;
 
@@ -13,6 +14,9 @@ const {server,app} = require('./socket/socketServer');
 
 // middlewares
 
+// setup an auth middleware
+
+app.use(cookie_parser());
 app.use(express.json());    // json parser
 
 
@@ -20,14 +24,17 @@ app.use(cors({              // cors middleware
   
   origin: CLIENT_URL, 
   methods: 'GET,POST,PUT,DELETE', 
-  allowedHeaders: 'Content-Type,Authorization' 
+  allowedHeaders: 'Content-Type,Authorization' ,
+  credentials: true
 }));
 
 
 //Routes config
 
-app.use('/api/', userRoutes);
-app.use('/api/', chatRoutes);
+
+app.use('/api/user/', userRoutes);
+app.use('/api/chat/', chatRoutes);
+
 
 // server event listener setup
 

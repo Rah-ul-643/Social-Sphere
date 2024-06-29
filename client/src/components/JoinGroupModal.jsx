@@ -1,33 +1,34 @@
 import React, { useState } from 'react';
 import './css/Modals.css';
-import { api } from '../apis';
+import { chatApi } from '../apis';
 import toast from 'react-hot-toast';
 
-const JoinGroupModal = ({ setJoinGroupModalOpen, username ,conversations}) => {
+const JoinGroupModal = ({ setJoinGroupModalOpen, conversations }) => {
 
     const [groupId, setGroupId] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        if (conversations.find(group => group.group_id === groupId)){
+
+        if (conversations.find(group => group.group_id === groupId)) {
             toast.error("Already a member of the group.");
             return;
         }
         try {
-            const response = await api.post('join-group', { groupId,username });
+            const response = await chatApi.post('join-group', { groupId });
             const data = response.data;
             console.log(data);
             if (data.success) {
                 toast.success("Join request sent...");
                 setJoinGroupModalOpen(false);
             }
-            else{
+            else {
                 toast.error(data.message);
             }
         } catch (error) {
             console.log(error);
-            toast.error("Unable to process request!");
+            localStorage.clear();
+            window.location.reload();
         }
 
     }

@@ -2,7 +2,7 @@
 import { useNavigate, Link } from 'react-router-dom';
 import React, { useState } from 'react';
 
-import {api} from '../apis';
+import { userApi } from '../apis';
 import './css/register.css';
 import toast from 'react-hot-toast';
 
@@ -20,7 +20,7 @@ const Register = () => {
     if (password === password2) {
       const toastId = toast.loading('Registering User...');
       try {
-        const response = await api.post('/register', {
+        const response = await userApi.post('/register', {
           name,
           username,
           password

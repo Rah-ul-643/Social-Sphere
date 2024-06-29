@@ -1,11 +1,19 @@
 import axios from 'axios';
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const BASE_URL = process.env.REACT_APP_API_BASE_URL
 
-const api = axios.create(
+const userApi = axios.create(
     {
-        baseURL: BASE_URL
+        baseURL: `${BASE_URL}/user`,
+        withCredentials: true
     }
 )
 
-export {api};
+const chatApi = axios.create(
+    {
+        baseURL: `${BASE_URL}/chat`,
+        withCredentials: true
+    }
+)
+
+export {userApi, chatApi};

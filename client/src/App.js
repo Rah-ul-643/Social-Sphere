@@ -8,7 +8,7 @@ import Register from './pages/register';
 
 function App() {
 
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('user') ? true : false);
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') ? true : false);
 
   return (
     <div className='App'>

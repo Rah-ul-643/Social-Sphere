@@ -4,7 +4,7 @@ const groups = require('../models/groups');
 const messages = require('../models/messages');
 const users = require('../models/users');
 
-const createNewConversation = async (groupId) => {
+const getMessages = async (groupId) => {
 
     const doc = await groups.findOne({ group_id: groupId })
         .populate({ path: 'messages', options: { sort: { createdAt: 1 } } });
@@ -43,11 +43,12 @@ const searchQueryHandler = async (req, res) => {
 
 const joinGroupHandler = async (req, res) => {
     try {
-        const { groupId, username } = req.body;
+        const { groupId } = req.body;
         const group = await groups.findOne({ group_id: groupId });
+        const username = req.username;
 
         if (group) {
-
+            
             if (group.join_requests.includes(username)) {
                 res.status(201).json({ success: false, message: "Request already sent. Please wait for admin to respond..." });
             }
@@ -70,8 +71,8 @@ const joinGroupHandler = async (req, res) => {
 
 const createGroupHandler = async (req, res) => {
     try {
-        const { groupName, username } = req.body;
-
+        const { groupName } = req.body;
+        const username = req.username;
         const newGroup = new groups({
 
             group_id: uuidv4(),
@@ -144,9 +145,14 @@ const groupDataHandler = async (req, res) => {
 
 const joinRequestResponseHandler = async (req, res) => {
     try {
+        const user = req.username;        
         const { group_id, acceptStatus, username } = req.query;
 
         const group = await groups.findOne({ group_id: group_id }, '-messages').exec();
+        
+        if (user !== group.admin){
+            res.status(401).json({message: "unauthorized"});
+        }
 
         if (acceptStatus === 'true') {
             group.participants.push(username);
@@ -164,19 +170,25 @@ const joinRequestResponseHandler = async (req, res) => {
 
 const leaveGroupHandler = async (req, res) => {
     try {
-        const { group_id, username } = req.query;
+        const { group_id } = req.query;
+        const username = req.username;
 
         const group = await groups.findOne({ group_id: group_id }).exec();
-        
+
         if (group.participants.length==1){
             await groups.findOneAndDelete({ group_id: group_id });
+            res.status(200).json({ success: true });
         }
-        else{
+
+        else if (username !== group.admin) {
             group.participants = group.participants.filter(user => user !== username);
             await group.save();
+            res.status(200).json({ success: true });
         }
-        
-        res.status(200).json({ success: true });
+
+        else{
+            res.status(203).json({ success: false });
+        }
 
     } catch (error) {
         console.log(error);
@@ -184,4 +196,4 @@ const leaveGroupHandler = async (req, res) => {
     }
 }
 
-module.exports = { createNewConversation, createNewMessage, searchQueryHandler, joinGroupHandler, createGroupHandler, addParticipant, groupDataHandler, joinRequestResponseHandler, leaveGroupHandler };
+module.exports = { getMessages, createNewMessage, searchQueryHandler, joinGroupHandler, createGroupHandler, addParticipant, groupDataHandler, joinRequestResponseHandler, leaveGroupHandler };

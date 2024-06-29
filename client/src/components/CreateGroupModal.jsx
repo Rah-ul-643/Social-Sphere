@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import './css/Modals.css';
 import toast from 'react-hot-toast';
-import { api } from '../apis';
+import { chatApi } from '../apis';
 
-const CreateGroupModal = ({ setCreateGroupModalOpen, username, setConversations, setActiveGroup }) => {
+const CreateGroupModal = ({ setCreateGroupModalOpen, setConversations, setActiveGroup }) => {
 
   const [groupName, setGroupName] = useState('');
 
@@ -11,24 +11,25 @@ const CreateGroupModal = ({ setCreateGroupModalOpen, username, setConversations,
     e.preventDefault();
 
     try {
-        const response = await api.post('create-group', { groupName, username });
-        const data = response.data;
-        console.log(data);
-        if (data.success) {
-            const newGroup = data.group;
-            setActiveGroup(newGroup);
-            setConversations(prev => [...prev,newGroup]);
-            
-            toast.success("New group created.");
-            setCreateGroupModalOpen(false);
-        }
-        
+      const response = await chatApi.post('create-group', { groupName });
+      const data = response.data;
+      console.log(data);
+      if (data.success) {
+        const newGroup = data.group;
+        setActiveGroup(newGroup);
+        setConversations(prev => [...prev, newGroup]);
+
+        toast.success("New group created.");
+        setCreateGroupModalOpen(false);
+      }
+
     } catch (error) {
-        console.log(error);
-        toast.error("Unable to process request!");
+      console.log(error);
+      localStorage.clear();
+      window.location.reload();
     }
 
-}
+  }
 
   return (
     <>

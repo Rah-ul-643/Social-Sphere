@@ -1,17 +1,25 @@
 const bcrypt= require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const users = require('../models/users');
+const secretKey = 'your-secret-key';            //  add to .env
 
 const loginController = async (req, res) => {
     const { username, password } = req.body;
     try {
 
         const user = await users.findOne({username:username});
-        if (user) {
-            const resObj= {'name': user.name,'username': user.username};
-            console.log("authenticted");
-            await bcrypt.compare(password, user.password) ? 
-                res.json({ user: resObj, success: true, message: "Logged in successfully" }) : 
+        if (user) {            
+            if (await bcrypt.compare(password, user.password) ){
+                console.log("authenticted");
+                const token = jwt.sign({ username }, secretKey, { expiresIn: '1h' });
+                res.cookie('token', token,
+                    {httpOnly: true,
+                    sameSite: 'strict' }
+                );
+                res.json({ token: token, success: true, message: "Logged in successfully" });
+            }
+            else 
                 res.json({ success: false, message: "Incorrect Password" });
         }
 

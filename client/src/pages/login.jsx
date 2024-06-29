@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './css/login.css';
-import {api} from '../apis';
+import { userApi } from '../apis';
 import toast from 'react-hot-toast';
 
-const Login = ({setIsLoggedIn}) => {
+const Login = ({ setIsLoggedIn }) => {
 
     const navigate = useNavigate();
 
@@ -16,19 +16,19 @@ const Login = ({setIsLoggedIn}) => {
         const toastId = toast.loading("Logging In");
 
         try {
-            const response = await api.post('/login', {
+            const response = await userApi.post('/login', {
                 username,
                 password
             });
 
             console.log(response.data);
             if (response.data.success) {
-                const user = response.data.user;
-                localStorage.setItem('user', JSON.stringify(user));
+                const token = response.data.token;
+                localStorage.setItem('token', JSON.stringify(token));
                 setIsLoggedIn(true);
                 toast.success("Successfully logged in");
                 navigate('/');
-                
+
             } else {
                 console.log(response.data.message);
                 toast.error(response.data.message);
@@ -63,7 +63,7 @@ const Login = ({setIsLoggedIn}) => {
                         />
                     </div>
                     <div className="form-group">
-                        
+
                         <label htmlFor="password">Password</label>
                         <input
                             type="password"

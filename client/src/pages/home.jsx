@@ -23,16 +23,16 @@ const Home = ({ setIsLoggedIn }) => {
 
     const [socket, setSocket] = useState(null);
     const [userName, setUserName] = useState('');
-    const [activeGroup,setActiveGroup] = useState(null);
+    const [activeGroup, setActiveGroup] = useState(null);
     const [conversations, setConversations] = useState([]);
     const [chats, setChats] = useState([]);
     const [messageInput, setMessageInput] = useState('');
     const [onlineUsers, setOnlineUsers] = useState('');
-    
+
     // loaders states
 
-    const [globalLoading,setGlobalLoading] = useState(true);
-    const [chatLoading,setChatLoading] = useState(false);
+    const [globalLoading, setGlobalLoading] = useState(true);
+    const [chatLoading, setChatLoading] = useState(false);
 
     //modal states
 
@@ -45,11 +45,17 @@ const Home = ({ setIsLoggedIn }) => {
     // on-mount only useEffect -> sets up new socket connection
 
     useEffect(() => {
-        const newSocket = io(SOCKET_SERVER_URL);
+        const newSocket = io(SOCKET_SERVER_URL, {
+            query: {
+                token: JSON.parse(localStorage.getItem('token'))
+            }
+        });
         setSocket(newSocket);
+
         return () => {
             newSocket.disconnect();
         };
+
     }, []);
 
     //  socket events
@@ -59,11 +65,8 @@ const Home = ({ setIsLoggedIn }) => {
         if (!socket) return;
 
         const handleConnect = () => {
-            const username = JSON.parse(localStorage.getItem('user')).username;
-            setUserName(username);            
 
-            socket.emit('setUserId', username);
-            socket.emit('getUsers', username, (userList) => {
+            socket.emit('getUsers', (userList) => {
                 setConversations(userList);
                 setGlobalLoading(false);
             });
@@ -73,11 +76,11 @@ const Home = ({ setIsLoggedIn }) => {
             setOnlineUsers(userList);
         }
 
-        const handleReceiveMsg = (msg, sender, groupId) => {             
+        const handleReceiveMsg = (msg, sender, groupId) => {
 
-            if (groupId === activeGroup.group_id) {            
+            if (groupId === activeGroup.group_id) {
                 setChats(prevChats => [...prevChats, { sender, message: msg }]);
-            }            
+            }
 
         };
 
@@ -94,6 +97,15 @@ const Home = ({ setIsLoggedIn }) => {
         socket.on('receive-msg', handleReceiveMsg);
         socket.on('online-users', handleOnlineUsers);
 
+        socket.on('connect_error', () => {
+            localStorage.removeItem('token');
+            setIsLoggedIn(false);
+        });
+
+        socket.on('set-username', (username) => {
+            setUserName(username);
+        })
+
         //cleanup function
 
         return () => {
@@ -103,23 +115,23 @@ const Home = ({ setIsLoggedIn }) => {
             socket.off('disconnect', handleDisconnect);
         };
 
-    }, [activeGroup, socket, userName]);
+    }, [activeGroup, setIsLoggedIn, socket, userName]);
 
 
 
     const handleConnection = (group) => {
-        if (socket ) {
+        if (socket) {
             setChatLoading(true);
             const group_id = group.group_id;
             const group_name = group.group_name;
 
-            socket.emit('connection-request', group_id, (chats) => {
+            socket.emit('group-conversation', group_id, (chats) => {
 
                 setChats(chats);
                 setChatLoading(false);
-                
-                if (!conversations.find(group => group.group_id===group_id)) {                 // add the group to the list of conversations.                    
-                    setConversations(prev => [...prev, {group_name,group_id}]);
+
+                if (!conversations.find(group => group.group_id === group_id)) {                 // add the group to the list of conversations.                    
+                    setConversations(prev => [...prev, { group_name, group_id }]);
                 }
 
             });
@@ -131,9 +143,8 @@ const Home = ({ setIsLoggedIn }) => {
     const handleSender = (e) => {
         e.preventDefault();
 
-        if (socket && messageInput && userName && activeGroup) {
-            socket.emit('send-msg', messageInput, userName, activeGroup.group_id);
-            setChats(prevChats => [...prevChats, { sender: userName, message: messageInput }]);
+        if (socket && messageInput && activeGroup) {
+            socket.emit('send-msg', messageInput, activeGroup.group_id);
             setMessageInput('');
         }
     };
@@ -141,102 +152,97 @@ const Home = ({ setIsLoggedIn }) => {
 
     return (
         <>
-        { globalLoading ?
-            <div className='Home Loader '>
-                <img src={globalLoaderImage} alt="Loading..." />
-            </div>
-        :
-        
-            <div className='Home'>
-                
-                {joinGroupModalOpen && 
-                    <JoinGroupModal 
-                        setJoinGroupModalOpen={setJoinGroupModalOpen} 
-                        username={userName}
-                        conversations={conversations}
-                    />
-                }
+            {globalLoading ?
+                <div className='Home Loader '>
+                    <img src={globalLoaderImage} alt="Loading..." />
+                </div>
+                :
 
-                {createGroupModalOpen && 
-                    <CreateGroupModal 
-                        setCreateGroupModalOpen={setCreateGroupModalOpen} 
-                        username={userName} 
-                        setActiveGroup={setActiveGroup}
-                        setConversations={setConversations}
-                    />
-                }
+                <div className='Home'>
 
-                {addParticipantModalOpen && 
-                    <AddParticipantModal 
-                        setAddParticipantModalOpen={setAddParticipantModalOpen}
-                        activeGroup={activeGroup}
-                    />
-                }
-
-                {viewGroupModalOpen &&
-                    <ViewGroupModal
-                        setViewGroupModalOpen={setViewGroupModalOpen}
-                        activeGroup={activeGroup}
-                        userName={userName}
-                        onlineUsers={onlineUsers}
-                    />                    
-                }
-
-                <SideBar 
-                    setIsLoggedIn={setIsLoggedIn}
-                    setChatSectionOpen={setChatSectionOpen}
-                    setJoinGroupModalOpen={setJoinGroupModalOpen}
-                    setCreateGroupModalOpen={setCreateGroupModalOpen}
-                />
-
-                <section className={`Conversation-Section ${chatSectionOpen ? 'slide-in' : 'slide-out'}`}  >
-
-                    <SearchBar
-                        setActiveGroup={setActiveGroup}
-                        handleConnection={handleConnection}
-                    />
-                    
-                    <ChatList
-                        conversations={conversations}
-                        setActiveGroup={setActiveGroup}
-                        handleConnection={handleConnection}
-                    />            
-
-                </section>
-                
-                <section className='Chat-Section'>
-
-                    <ChatHeader
-                        activeGroup={activeGroup}
-                        setAddParticipantModalOpen={setAddParticipantModalOpen}
-                        setViewGroupModalOpen={setViewGroupModalOpen}
-                    />
-                    {chatLoading ? 
-                        <div className='Loader Chat-Content'>
-                            loading chats... <img src={componentLoaderImage} className='ChatLoaderImg' alt="" />
-                        </div>
-                     :
-                        <ChatContent
-                            userName={userName}
-                            activeGroup={activeGroup}
-                            chats={chats}
+                    {joinGroupModalOpen &&
+                        <JoinGroupModal
+                            setJoinGroupModalOpen={setJoinGroupModalOpen}
+                            conversations={conversations}
                         />
                     }
 
-                    <MessageInputBar
-                        messageInput={messageInput}
-                        setMessageInput={setMessageInput}
-                        activeGroup={activeGroup}
-                        handleSender={handleSender}
+                    {createGroupModalOpen &&
+                        <CreateGroupModal
+                            setCreateGroupModalOpen={setCreateGroupModalOpen}
+                            setActiveGroup={setActiveGroup}
+                            setConversations={setConversations}
+                        />
+                    }
+
+                    {addParticipantModalOpen &&
+                        <AddParticipantModal
+                            setAddParticipantModalOpen={setAddParticipantModalOpen}
+                            activeGroup={activeGroup}
+                        />
+                    }
+
+                    {viewGroupModalOpen &&
+                        <ViewGroupModal
+                            setViewGroupModalOpen={setViewGroupModalOpen}
+                            activeGroup={activeGroup}
+                            userName={userName}
+                            onlineUsers={onlineUsers}
+                        />
+                    }
+
+                    <SideBar
+                        setIsLoggedIn={setIsLoggedIn}
+                        setChatSectionOpen={setChatSectionOpen}
+                        setJoinGroupModalOpen={setJoinGroupModalOpen}
+                        setCreateGroupModalOpen={setCreateGroupModalOpen}
                     />
 
-                </section>
-               
-            </div>        
-        }
+                    <section className={`Conversation-Section ${chatSectionOpen ? 'slide-in' : 'slide-out'}`}  >
+
+                        <SearchBar />
+
+                        <ChatList
+                            conversations={conversations}
+                            setActiveGroup={setActiveGroup}
+                            handleConnection={handleConnection}
+                        />
+
+                    </section>
+
+                    <section className='Chat-Section'>
+
+                        <ChatHeader
+                            activeGroup={activeGroup}
+                            setAddParticipantModalOpen={setAddParticipantModalOpen}
+                            setViewGroupModalOpen={setViewGroupModalOpen}
+                        />
+                        {chatLoading ?
+                            <div className='Loader Chat-Content'>
+                                loading chats... <img src={componentLoaderImage} className='ChatLoaderImg' alt="" />
+                            </div>
+                            :
+                            <ChatContent
+                                userName={userName}
+                                activeGroup={activeGroup}
+                                chats={chats}
+                            />
+                        }
+
+                        <MessageInputBar
+                            messageInput={messageInput}
+                            setMessageInput={setMessageInput}
+                            activeGroup={activeGroup}
+                            handleSender={handleSender}
+                        />
+
+                    </section>
+
+                </div>
+            }
         </>
     )
-    
+
 }
 
 export default Home;

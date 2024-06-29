@@ -1,10 +1,10 @@
-const { createNewConversation, createNewMessage } = require('./chatController');
+const { getMessages, createNewMessage } = require('./chatController');
 const groups = require('../models/groups');
 
 const onlineUsers = [];
 
-const setUserId = (io,socket, username) => {
-
+const setUserId = (io,socket) => {
+    const username = socket.user;
     onlineUsers.push({username,socketId:socket.id});                               // add connected user to online list
     const onlineUsersList = onlineUsers.map(user => user.username);
     console.log(onlineUsersList);                                               
@@ -28,7 +28,7 @@ const getUsers = async (username, cb) => {
 const handleConnectionRequest = async ( groupId, cb, socket) => {
 
     try {
-        const chat = await createNewConversation( groupId);            // new conversation created            
+        const chat = await getMessages( groupId);            // new conversation created            
         cb(chat);
         socket.join(groupId);
     } catch (error) {
@@ -37,10 +37,10 @@ const handleConnectionRequest = async ( groupId, cb, socket) => {
 
 }
 
-const handleSendMessageEvent = async (msg, sender, groupId, socket) => {
+const handleSendMessageEvent = async (msg, sender, groupId, io) => {
     console.log("message received on server: " + msg);
     try {
-        socket.to(groupId).emit('receive-msg', msg, sender, groupId);
+        io.to(groupId).emit('receive-msg', msg, sender, groupId);
         await createNewMessage(sender, msg, groupId);
 
     } catch (error) {
@@ -50,7 +50,7 @@ const handleSendMessageEvent = async (msg, sender, groupId, socket) => {
 };
 
 const disconnectionHandler = ( io, socket)=>{
-    console.log(socket.id,"disconnected");
+    console.log(`${socket.id} disconnected. ${socket.user} is offline now.`);
 
     const index = onlineUsers.findIndex(user => user.socketId === socket.id)           // on disconnection, delete the record off the list.
     onlineUsers.splice(index,1);
