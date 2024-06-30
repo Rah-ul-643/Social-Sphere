@@ -1,7 +1,7 @@
 import React from 'react'
 import './css/MessageInputBar.css';
 
-const MessageInputBar = ({ messageInput, setMessageInput, activeGroup, handleSender }) => {
+const MessageInputBar = ({ messageInput, setMessageInput, activeGroup, handleSendMsg }) => {
 
   const handleMessageInput = (e) => {
     if (activeGroup) {
@@ -19,7 +19,7 @@ const MessageInputBar = ({ messageInput, setMessageInput, activeGroup, handleSen
         onChange={handleMessageInput}
         className={!activeGroup ? 'no-cursor' : undefined}
       />
-      <button onClick={handleSender} type='submit'><i className="fa-solid fa-paper-plane"></i></button>
+      <button onClick={handleSendMsg} type='submit'><i className="fa-solid fa-paper-plane"></i></button>
 
     </form>
   )

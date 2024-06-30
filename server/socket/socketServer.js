@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const secretKey = process.env.JWT_SECRET_KEY; 
 
-const { handleConnectionRequest, handleSendMessageEvent, setUserId, getUsers, disconnectionHandler } = require('../controllers/socketController');
+const { retreiveChatHistory, handleSendMessageEvent, updateOnlineUsers, handleRetrieveConversations, disconnectionHandler } = require('../controllers/socketController');
 
 const CLIENT_URL = process.env.CLIENT_URL;
 const app = express();
@@ -41,18 +41,18 @@ io.use((socket, next) => {
 
 io.on('connection', (socket) => {
     
-    console.log(`User connected with id: ${socket.id} , username: ${socket.user}`);
+    console.log(` '${socket.user}' connected with id: ${socket.id} `);
 
     io.to(socket.id).emit('set-username',socket.user);
 
-    setUserId(io, socket);
+    updateOnlineUsers(io, socket);
 
-    socket.on('getUsers', (cb) => {
-        getUsers( socket.user, cb);
+    socket.on('retrieve-conversations', (cb) => {
+        handleRetrieveConversations( socket.user, cb);
     })
 
-    socket.on('group-conversation', (groupId, cb) => {
-        handleConnectionRequest(groupId, cb, socket);
+    socket.on('chat-history', (groupId, cb) => {
+        retreiveChatHistory(groupId, cb, socket);
     });
 
     socket.on('send-msg', (msg, groupId ) => {

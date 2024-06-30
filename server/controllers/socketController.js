@@ -3,15 +3,15 @@ const groups = require('../models/groups');
 
 const onlineUsers = [];
 
-const setUserId = (io,socket) => {
-    const username = socket.user;
-    onlineUsers.push({username,socketId:socket.id});                               // add connected user to online list
-    const onlineUsersList = onlineUsers.map(user => user.username);
-    console.log(onlineUsersList);                                               
-    io.emit('online-users', onlineUsersList);                           // emit the updated list of online users to all other users.
-}
+const updateOnlineUsers = (io,socket) => {
+    
+    onlineUsers.push(socket.user);                               // add connected user to online list
+    console.log(onlineUsers);                                               
+    io.emit('online-users', onlineUsers);     
 
-const getUsers = async (username, cb) => {
+}                     
+
+const handleRetrieveConversations = async (username, cb) => {
     try {
         const lists = await groups.find(
             { participants: { $all: [username] } })              // Select all records with username as a participant
@@ -25,7 +25,7 @@ const getUsers = async (username, cb) => {
     }
 }
 
-const handleConnectionRequest = async ( groupId, cb, socket) => {
+const retreiveChatHistory = async ( groupId, cb, socket) => {
 
     try {
         const chat = await getMessages( groupId);            // new conversation created            
@@ -52,12 +52,10 @@ const handleSendMessageEvent = async (msg, sender, groupId, io) => {
 const disconnectionHandler = ( io, socket)=>{
     console.log(`${socket.id} disconnected. ${socket.user} is offline now.`);
 
-    const index = onlineUsers.findIndex(user => user.socketId === socket.id)           // on disconnection, delete the record off the list.
+    const index = onlineUsers.findIndex(user => user === socket.user)           // on disconnection, delete the record off the list.
     onlineUsers.splice(index,1);
 
-    const onlineUsersList = onlineUsers.map(user => user.username);
-
-    io.emit('online-users', onlineUsersList);
+    io.emit('online-users', onlineUsers);
 }
 
-module.exports = { handleConnectionRequest, handleSendMessageEvent, setUserId, getUsers, disconnectionHandler };
+module.exports = { retreiveChatHistory, handleSendMessageEvent, updateOnlineUsers, handleRetrieveConversations, disconnectionHandler };

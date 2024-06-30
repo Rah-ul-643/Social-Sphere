@@ -16,6 +16,7 @@ import ViewGroupModal from '../components/ViewGroupModal';
 
 import globalLoaderImage from '../static/loader.gif';
 import componentLoaderImage from '../static/componentLoader.gif';
+import Loader from '../components/Loader';
 
 const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKET_SERVER_URL
 
@@ -66,8 +67,8 @@ const Home = ({ setIsLoggedIn }) => {
 
         const handleConnect = () => {
 
-            socket.emit('getUsers', (userList) => {
-                setConversations(userList);
+            socket.emit('retrieve-conversations', (groupList) => {
+                setConversations(groupList);
                 setGlobalLoading(false);
             });
         };
@@ -119,13 +120,13 @@ const Home = ({ setIsLoggedIn }) => {
 
 
 
-    const handleConnection = (group) => {
+    const fetchChatHistory = (group) => {
         if (socket) {
             setChatLoading(true);
             const group_id = group.group_id;
             const group_name = group.group_name;
 
-            socket.emit('group-conversation', group_id, (chats) => {
+            socket.emit('chat-history', group_id, (chats) => {
 
                 setChats(chats);
                 setChatLoading(false);
@@ -140,7 +141,7 @@ const Home = ({ setIsLoggedIn }) => {
     };
 
 
-    const handleSender = (e) => {
+    const handleSendMsg = (e) => {
         e.preventDefault();
 
         if (socket && messageInput && activeGroup) {
@@ -153,9 +154,12 @@ const Home = ({ setIsLoggedIn }) => {
     return (
         <>
             {globalLoading ?
-                <div className='Home Loader '>
-                    <img src={globalLoaderImage} alt="Loading..." />
-                </div>
+
+                <Loader  
+                    divClasses={'Loader Home'} 
+                    loaderImage={globalLoaderImage}                     
+                />
+
                 :
 
                 <div className='Home'>
@@ -205,7 +209,7 @@ const Home = ({ setIsLoggedIn }) => {
                         <ChatList
                             conversations={conversations}
                             setActiveGroup={setActiveGroup}
-                            handleConnection={handleConnection}
+                            fetchChatHistory={fetchChatHistory}
                         />
 
                     </section>
@@ -218,9 +222,14 @@ const Home = ({ setIsLoggedIn }) => {
                             setViewGroupModalOpen={setViewGroupModalOpen}
                         />
                         {chatLoading ?
-                            <div className='Loader Chat-Content'>
-                                loading chats... <img src={componentLoaderImage} className='ChatLoaderImg' alt="" />
-                            </div>
+
+                            <Loader 
+                                divClasses={'Chat-Content Loader'} 
+                                loaderImage={componentLoaderImage} 
+                                imageClasses={'ChatLoaderImg'} 
+                                content={'loading chats...'}
+                            />
+                                
                             :
                             <ChatContent
                                 userName={userName}
@@ -233,7 +242,7 @@ const Home = ({ setIsLoggedIn }) => {
                             messageInput={messageInput}
                             setMessageInput={setMessageInput}
                             activeGroup={activeGroup}
-                            handleSender={handleSender}
+                            handleSendMsg={handleSendMsg}
                         />
 
                     </section>

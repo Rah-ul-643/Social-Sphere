@@ -120,7 +120,9 @@ const ViewGroupModal = ({ setViewGroupModalOpen, userName, activeGroup, onlineUs
                 }
 
                 {!groupData &&
-                    <h2>loading...</h2>
+                    <div className='m-auto'>
+                        <h2 >loading...</h2>
+                    </div>
                 }
             </div>
 
