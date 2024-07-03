@@ -37,7 +37,10 @@ const Home = ({ setIsLoggedIn }) => {
 
     //modal states
 
-    const [chatSectionOpen, setChatSectionOpen] = useState(true);
+    const [isSmallScreen, ] = useState(window.innerWidth <= 768);
+    
+    const [conversationSectionOpen,setConversationSectionOpen] = useState(true);
+    const [chatSectionOpen, setChatSectionOpen] = useState(!isSmallScreen);
     const [createGroupModalOpen, setCreateGroupModalOpen] = useState(false);
     const [joinGroupModalOpen, setJoinGroupModalOpen] = useState(false);
     const [addParticipantModalOpen, setAddParticipantModalOpen] = useState(false);
@@ -197,12 +200,13 @@ const Home = ({ setIsLoggedIn }) => {
 
                     <SideBar
                         setIsLoggedIn={setIsLoggedIn}
+                        setConversationSectionOpen={setConversationSectionOpen}
                         setChatSectionOpen={setChatSectionOpen}
                         setJoinGroupModalOpen={setJoinGroupModalOpen}
                         setCreateGroupModalOpen={setCreateGroupModalOpen}
                     />
 
-                    <section className={`Conversation-Section ${chatSectionOpen ? 'slide-in' : 'slide-out'}`}  >
+                    {conversationSectionOpen && <section className={`Conversation-Section ${conversationSectionOpen ? 'slide-in' : 'slide-out'}`}  >
 
                         <SearchBar />
 
@@ -210,11 +214,15 @@ const Home = ({ setIsLoggedIn }) => {
                             conversations={conversations}
                             setActiveGroup={setActiveGroup}
                             fetchChatHistory={fetchChatHistory}
+                            setChatSectionOpen={setChatSectionOpen}
+                            setConversationSectionOpen={setConversationSectionOpen}
+                            isSmallScreen={isSmallScreen}
                         />
 
                     </section>
+                    }
 
-                    <section className='Chat-Section'>
+                    {chatSectionOpen && <section className='Chat-Section'>
 
                         <ChatHeader
                             activeGroup={activeGroup}
@@ -236,6 +244,7 @@ const Home = ({ setIsLoggedIn }) => {
                                 activeGroup={activeGroup}
                                 chats={chats}
                             />
+                            
                         }
 
                         <MessageInputBar
@@ -246,6 +255,7 @@ const Home = ({ setIsLoggedIn }) => {
                         />
 
                     </section>
+                    }
 
                 </div>
             }

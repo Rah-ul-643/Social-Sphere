@@ -5,7 +5,24 @@ const MessageInputBar = ({ messageInput, setMessageInput, activeGroup, handleSen
 
   const handleMessageInput = (e) => {
     if (activeGroup) {
-      setMessageInput(e.target.value);
+      let inputValue = e.target.value;
+      const len = inputValue.length;
+      const charList = ['.','?','!'];
+      
+      setMessageInput(prev => {
+
+        if (prev.length<len){
+          if (inputValue.length===1){
+            return inputValue.toUpperCase();  
+          }
+          else if (charList.includes(inputValue[len-2]) && inputValue[len-1]!== inputValue[len-2] ) {
+            return prev + ' ' + inputValue[len-1].toUpperCase();
+          }
+        }
+        return inputValue;
+        
+      });
+  
     }
   }
 

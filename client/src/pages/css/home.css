@@ -3,6 +3,7 @@
     align-items: flex-start;
     justify-content: space-evenly;
     color: white;
+    font-family: "Playfair Display", serif;
 }
 
 .Modal{
@@ -33,6 +34,11 @@
     margin-right: 1rem;
 }
 
+@media (max-width: 768px) {
+    .Conversation-Section{
+        width: 100%;
+    }
+}
 
 .slide-in{
     transform: scale(1);

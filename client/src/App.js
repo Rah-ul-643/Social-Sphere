@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/home';
 import Login from './pages/login';
 import Register from './pages/register';
-
+import NotFound from './pages/notFound';
 
 function App() {
 
@@ -16,6 +16,7 @@ function App() {
         <Route path='/' element={isLoggedIn? <Home setIsLoggedIn={setIsLoggedIn}/> : <Login setIsLoggedIn={setIsLoggedIn} />} />
         <Route path='/login' element={ isLoggedIn ? <Home setIsLoggedIn={setIsLoggedIn}/> : <Login setIsLoggedIn={setIsLoggedIn} />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/*' element={<NotFound />} />
       </Routes>
     </div>
   );

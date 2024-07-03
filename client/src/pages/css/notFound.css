@@ -1,0 +1,20 @@
+.Not-Found{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: white;
+    font-family: "Playfair Display", serif;
+}
+
+.Not-Found h1{
+    font-size: 3rem;
+    font-weight: bolder;
+}
+
+.Not-Found a{
+    font-size: 1.5rem;
+    text-decoration: underline;
+}
+

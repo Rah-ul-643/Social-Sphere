@@ -53,7 +53,7 @@ const registerController = async (req, res) => {
             res.json({ success: true, message: "Registered successfully" });
         }
         else {
-            res.json({ success: false, message: "Email already in use" });
+            res.json({ success: false, message: "Username already in use" });
         }
 
     } catch (error) {

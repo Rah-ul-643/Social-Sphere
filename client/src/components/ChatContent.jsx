@@ -21,7 +21,7 @@ const ChatContent = ({ userName, activeGroup, chats }) => {
                     :
                     chats.map((item, index) => (
                         <li key={index} className={item.sender === userName ? 'sender-message' : 'receiver-message'}>
-                            <h3>{item.sender}</h3>
+                            <h3>{item.sender.toUpperCase()}</h3>
                             <p>{item.message}</p>
                         </li>
                     ))

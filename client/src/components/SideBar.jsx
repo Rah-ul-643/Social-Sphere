@@ -2,7 +2,7 @@ import React from 'react';
 import toast from 'react-hot-toast';
 import './css/SideBar.css';
 
-const SideBar = ({ setIsLoggedIn, setChatSectionOpen, setJoinGroupModalOpen, setCreateGroupModalOpen }) => {
+const SideBar = ({ setIsLoggedIn, setChatSectionOpen, setConversationSectionOpen, setJoinGroupModalOpen, setCreateGroupModalOpen }) => {
 
   const handleLogOut = () => {
     setIsLoggedIn(false);
@@ -11,7 +11,11 @@ const SideBar = ({ setIsLoggedIn, setChatSectionOpen, setJoinGroupModalOpen, set
   }
 
   const handleModalButtonClick = () => {
-    setChatSectionOpen(prev => !prev);
+    setChatSectionOpen(prev => {
+      setConversationSectionOpen(prev);
+      return !prev;
+  });
+    
   }
 
   const handleJoinGroupModalClick = () => {
@@ -27,8 +31,7 @@ const SideBar = ({ setIsLoggedIn, setChatSectionOpen, setJoinGroupModalOpen, set
   return (
 
     <div className='Side-bar'>
-      <button><i className="fa-solid fa-sun" style={{ "color": "#f49e0b" }}></i></button>
-      <button onClick={handleModalButtonClick} ><i className="fa-solid fa-list"></i></button>
+      <button className='modal-btn' onClick={handleModalButtonClick} ><i className="fa-solid fa-list"></i></button>
       <button onClick={handleJoinGroupModalClick}><i className="fa-solid fa-users-gear"></i></button>
       <button onClick={handleCreateGroupModalClick}><i className="fa-solid fa-plus"></i></button>
       <button><i className="fa-solid fa-user"></i></button>

@@ -7,7 +7,10 @@ const users = require('../models/users');
 const getMessages = async (groupId) => {
 
     const doc = await groups.findOne({ group_id: groupId })
-        .populate({ path: 'messages', options: { sort: { createdAt: 1 } } });
+        .populate({ 
+            path: 'messages', 
+            options: { sort: { createdAt: 1 } },
+        });
 
     if (doc) {
         return doc.messages;

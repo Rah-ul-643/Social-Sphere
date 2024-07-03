@@ -1,18 +1,24 @@
 import React from 'react'
 import './css/ChatList.css';
 
-const ChatList = ({ conversations, setActiveGroup, fetchChatHistory }) => {
+const ChatList = ({ conversations, setActiveGroup, fetchChatHistory , setChatSectionOpen, setConversationSectionOpen, isSmallScreen}) => {
+
+  const handleClick = (group) => {
+    setActiveGroup(group);
+    fetchChatHistory(group);
+
+    if (isSmallScreen){
+      setConversationSectionOpen(false);
+      setChatSectionOpen(true);
+    }   
+  }
 
   return (
     <ul className='Chat-List'>
       {conversations.map((group) => (
-        <li key={group.group_id} onClick={() => {
-          setActiveGroup(group);
-          fetchChatHistory(group);
-        }}>
+        <li key={group.group_id} onClick={() => handleClick(group)}>
           <div className='chat-header-dp'><i className="fa-solid fa-users-line"></i></div>
           <h2>{group.group_name}</h2>
-
         </li>
       )
       )}
