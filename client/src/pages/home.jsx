@@ -22,6 +22,7 @@ const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKET_SERVER_URL
 
 const Home = ({ setIsLoggedIn }) => {
 
+    const [isDarkMode, setIsDarkMode] = useState(true);
     const [socket, setSocket] = useState(null);
     const [userName, setUserName] = useState('');
     const [activeGroup, setActiveGroup] = useState(null);
@@ -37,9 +38,9 @@ const Home = ({ setIsLoggedIn }) => {
 
     //modal states
 
-    const [isSmallScreen, ] = useState(window.innerWidth <= 768);
-    
-    const [conversationSectionOpen,setConversationSectionOpen] = useState(true);
+    const [isSmallScreen,] = useState(window.innerWidth <= 768);
+
+    const [conversationSectionOpen, setConversationSectionOpen] = useState(true);
     const [chatSectionOpen, setChatSectionOpen] = useState(!isSmallScreen);
     const [createGroupModalOpen, setCreateGroupModalOpen] = useState(false);
     const [joinGroupModalOpen, setJoinGroupModalOpen] = useState(false);
@@ -158,9 +159,9 @@ const Home = ({ setIsLoggedIn }) => {
         <>
             {globalLoading ?
 
-                <Loader  
-                    divClasses={'Loader Home'} 
-                    loaderImage={globalLoaderImage}                     
+                <Loader
+                    divClasses={'Loader Home'}
+                    loaderImage={globalLoaderImage}
                 />
 
                 :
@@ -204,14 +205,20 @@ const Home = ({ setIsLoggedIn }) => {
                         setChatSectionOpen={setChatSectionOpen}
                         setJoinGroupModalOpen={setJoinGroupModalOpen}
                         setCreateGroupModalOpen={setCreateGroupModalOpen}
+                        isDarkMode={isDarkMode}
+                        setIsDarkMode={setIsDarkMode}
                     />
 
-                    {conversationSectionOpen && <section className={`Conversation-Section ${conversationSectionOpen ? 'slide-in' : 'slide-out'}`}  >
+                    {conversationSectionOpen && <section className=
+                        {`Conversation-Section ${conversationSectionOpen ? 'slide-in' : 'slide-out'}`}
+                        style={{ borderRight: isDarkMode ? 'solid white 2px' : 'solid black 2px' }}
+                    >
 
                         <SearchBar />
-
+                        <h1 className='chats-header'>Chats</h1>
                         <ChatList
                             conversations={conversations}
+                            activeGroup={activeGroup}
                             setActiveGroup={setActiveGroup}
                             fetchChatHistory={fetchChatHistory}
                             setChatSectionOpen={setChatSectionOpen}
@@ -229,22 +236,28 @@ const Home = ({ setIsLoggedIn }) => {
                             setAddParticipantModalOpen={setAddParticipantModalOpen}
                             setViewGroupModalOpen={setViewGroupModalOpen}
                         />
+                        <hr style={{
+                            backgroundColor: isDarkMode ? 'white' : 'black',
+                            width: '75%',
+                            margin: 'auto',
+                            height: '1.5px'
+                        }} />
                         {chatLoading ?
 
-                            <Loader 
-                                divClasses={'Chat-Content Loader'} 
-                                loaderImage={componentLoaderImage} 
-                                imageClasses={'ChatLoaderImg'} 
+                            <Loader
+                                divClasses={'Chat-Content Loader'}
+                                loaderImage={componentLoaderImage}
+                                imageClasses={'ChatLoaderImg'}
                                 content={'loading chats...'}
                             />
-                                
+
                             :
                             <ChatContent
                                 userName={userName}
                                 activeGroup={activeGroup}
                                 chats={chats}
                             />
-                            
+
                         }
 
                         <MessageInputBar

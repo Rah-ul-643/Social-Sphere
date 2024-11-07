@@ -6,6 +6,8 @@ const secretKey = process.env.JWT_SECRET_KEY;
 
 const loginController = async (req, res) => {
     const { username, password } = req.body;
+    console.log(`request received: Username: ${username}, Password: ${password} `);
+    
     try {
 
         const user = await users.findOne({username:username});

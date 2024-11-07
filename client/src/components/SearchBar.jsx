@@ -7,7 +7,6 @@ const SearchBar = () => {
     const [searchResult, setSearchResult] = useState([]);
     const [searchInput, setSearchInput] = useState('');
 
-
     const handleSearch = async (e) => {
         const userString = e.target.value;
         setSearchInput(userString);
@@ -23,19 +22,29 @@ const SearchBar = () => {
         }
     }
 
+    const handleClearButton = () => {
+        setSearchInput('');
+        setSearchResult([]);
+    }
+
     return (
         <nav className='SearchBar'>
-
+            <h1>Social Sphere</h1>
             <div className='Search-Container'>
-                <input
-                    type='text'
-                    name='receiver'
-                    placeholder='Search user...'
-                    value={searchInput}
-                    autoComplete='off'
-                    onChange={(e) => handleSearch(e)}
-                >
-                </input>
+                <div className='input-wrapper'>
+                    <input
+                        type='text'
+                        name='receiver'
+                        placeholder='Search user...'
+                        value={searchInput}
+                        autoComplete='off'
+                        onChange={(e) => handleSearch(e)}
+                    >                
+                    </input>
+                    <button onClick={() => handleClearButton()} className='clear-search'>
+                        <i className="fa-regular fa-circle-xmark"></i>
+                    </button> 
+                </div>
             </div>
 
             <div className='Search-Results-Container'>
@@ -43,7 +52,7 @@ const SearchBar = () => {
                     {searchResult.map((user, index) => (
                         <li key={index}>
                             <div className='chat-header-dp'><i className="fa-solid fa-user"></i></div>
-                            <h1>{user.username}</h1>
+                            <h2>{user.username}</h2>
                         </li>
                     ))}
                 </ul>

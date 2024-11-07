@@ -31,8 +31,8 @@ const ChatHeader = ({ activeGroup, setAddParticipantModalOpen, setViewGroupModal
 
                     <div className='chat-header-features'>
                         <button onClick={handleViewGroupModal}>View Group  </button>
-                        <button className='add-participant' onClick={handleParticipantModal}>Add  <i className="fa-solid fa-user-plus"></i></button>
-                        <button onClick={handleCopyButton}>Copy ID  <i className="fa-regular fa-copy"></i></button>
+                        <button onClick={handleParticipantModal}>Add  <i className="fa-solid fa-user-plus"></i></button>
+                        <button className='copy-btn' onClick={handleCopyButton}>Copy ID  <i className="fa-regular fa-copy"></i></button>
                     </div>
                     <div >
                         <button className='collapse-btn' onClick={()=>setCollapsed(!collapsed)}><i className="fa-solid fa-ellipsis-vertical"></i></button>

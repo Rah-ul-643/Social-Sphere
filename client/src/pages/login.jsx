@@ -21,7 +21,7 @@ const Login = ({ setIsLoggedIn }) => {
                 password
             });
 
-            console.log(response.data);
+            // console.log(response.data);
             if (response.data.success) {
                 const token = response.data.token;
                 localStorage.setItem('token', JSON.stringify(token));
@@ -30,13 +30,13 @@ const Login = ({ setIsLoggedIn }) => {
                 navigate('/');
 
             } else {
-                console.log(response.data.message);
+                // console.log(response.data.message);
                 toast.error(response.data.message);
                 navigate('/login')                          // api sends an object {user, success, message}
             }
 
         } catch (error) {
-            console.log("Login Error", error);
+            // console.log("Login Error", error);
             toast.error(`Oops! Server Issue :( \n Lemme fix it in a minute...`)
         }
         finally {

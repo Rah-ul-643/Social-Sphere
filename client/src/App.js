@@ -9,7 +9,7 @@ import NotFound from './pages/notFound';
 function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') ? true : false);
-
+  
   return (
     <div className='App'>
       <Routes>

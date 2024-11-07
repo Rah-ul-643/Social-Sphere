@@ -1,19 +1,22 @@
 
 .Message-Input-Bar {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    width: 100%;
 }
 
 .Message-Input-Bar input[type="text"] {
     color: black;   
     flex-grow: 1;
-    padding: 10px 20px;
+    max-width: 80%;
+    padding: 8px 20px;
     font-size: 16px;
-    border: 1px solid #dddddd;
+    border: #5b5b5b 2px solid;
     border-top-left-radius: 1rem;
     border-bottom-left-radius: 1rem;
     outline: none;
 }
+
 
 .no-cursor{
     pointer-events: none;

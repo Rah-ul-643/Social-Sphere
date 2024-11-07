@@ -1,9 +1,9 @@
 .Side-bar{
     min-width: 50px;
     height: 100%;
-    background-color: white; 
+    background-color: #e100ff; 
+    background-image: linear-gradient(to bottom, #f912e2, #e100ff,#6400d7);
     margin-right: 1rem;
-    border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;

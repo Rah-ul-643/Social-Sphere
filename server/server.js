@@ -15,7 +15,7 @@ const auth = require('./middlewares/auth');
 
 // middlewares
 
-
+app.use(express.urlencoded({ extended: true }));
 app.use(cookie_parser());   
 app.use(express.json());    // json parser
 

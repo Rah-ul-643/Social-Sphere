@@ -1,20 +1,36 @@
 .SearchBar {
-    display: flex;
-    align-items: center;
     padding: 10px;
-    background-image: linear-gradient(to left,#101010,#2a2a2a);
-    border-radius: 1rem;
-    min-height: 88px;
+    margin-bottom: 20px;
+}
+
+.SearchBar h1{
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 10px 0 30px 0;
 }
 
 .Search-Container{    
     flex-grow: 1;
-    width: 100%; 
+    width: 100%;
+}
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.clear-search{
+    color: rgb(80, 80, 80);
+    font-size: 1.2rem;
+    position: absolute;
+    right: 10px;
+    top: 8px;
 }
 
 .Search-Container input[type="text"] {
     color: black;
-    padding: 10px 20px;
+    padding: 8px 20px;
     font-size: 16px;
     border: #8e8e8d 1px solid;
     border-radius: 2rem;
@@ -27,12 +43,13 @@
     width: 90%;
     margin: auto;
     position: absolute;
-    top: 70px;
+    top: 150px;
     border-radius: 30px;
     background-color: transparent;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
     max-height: 75%;
     overflow-y: scroll;
+    z-index: 100;
 }
 
 .Search-Results-Container::-webkit-scrollbar {
@@ -49,7 +66,7 @@
     display: flex;
     align-items: center;
     text-align: center;
-    padding: 12px;  
+    padding: 0 10px;  
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s ease;

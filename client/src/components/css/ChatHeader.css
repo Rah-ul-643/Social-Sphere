@@ -1,13 +1,13 @@
 
-.chat-header{
-    background-image: linear-gradient(to right,#101010,#454545);
-    border-radius: 1rem;
+.chat-header{  
     min-height: 88px;
     padding: 10px 10px 10px 30px; 
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+
 }
+
 
 .chat-header-dp{
     margin: 10px;
@@ -37,17 +37,16 @@
 
 .chat-header-features button{
     padding: 10px;
-    font-size: 14px;
-    border-radius: 30px;
+    font-size: 1rem;
+    border-radius: 15px;
     font-weight: bold;
-    border: rgb(225, 0, 255) solid 1px;
+    transition: all 0.3s ease;
 }
 
-.add-participant{
-    background-color: rgb(255, 255, 255);
-    color: rgb(0, 0, 0);
-    border-radius: 50%;
+.chat-header-features button:hover{
+    color: #E100EF;
 }
+
 
 .header-title{
     font-size: 2rem;

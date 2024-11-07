@@ -9,12 +9,15 @@
     border-radius: 1rem;
 }
 
+
 .view-group section{
     width: 50%;
     padding: 1rem 2rem;
     border-right: 2px rgb(255, 255, 255) solid;
     height: 100%;
 }
+
+
 .view-group section:last-child{
     border: none;
 }
@@ -23,7 +26,6 @@
     font-size: 2rem;
     text-align: center;
     margin: 2rem;
-
 }
 
 .view-group ul{
@@ -96,6 +98,8 @@ h4{
     color: rgb(255, 0, 0);
     border-top: 1px white solid;
     text-align: center;
+    position: relative;
+    bottom: 30px;
 }
 
 .leave-group button{
@@ -108,4 +112,19 @@ h4{
 .leave-group button:hover{
     background-color: rgb(195, 6, 6);
     color: rgb(255, 255, 255);
+}
+
+@media (max-width:740px) {
+    .view-group{
+        flex-direction: column;
+        height: 90%;
+    }
+    .view-group section{
+        width: 100%;
+        border-right: none;
+        border-bottom: 2px rgb(255, 255, 255) solid;
+    }
+    .view-group h1{
+        font-size: 1.5rem;
+    }
 }

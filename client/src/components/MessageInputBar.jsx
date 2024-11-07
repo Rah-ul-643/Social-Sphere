@@ -1,5 +1,6 @@
 import React from 'react'
 import './css/MessageInputBar.css';
+import EmojiPicker from 'emoji-picker-react';
 
 const MessageInputBar = ({ messageInput, setMessageInput, activeGroup, handleSendMsg }) => {
 
@@ -28,6 +29,11 @@ const MessageInputBar = ({ messageInput, setMessageInput, activeGroup, handleSen
 
   return (
     <form className='Message-Input-Bar'>
+{/*    
+      <EmojiPicker 
+        theme='dark'
+        emojiStyle='google'
+      /> */}
 
       <input
         type='text'

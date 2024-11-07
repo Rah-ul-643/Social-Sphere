@@ -14,7 +14,17 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;
-  background-color: #efefef;
+  
+}
+
+body.light{
+  background-color: #ffffff;
+  color: #000000;
+}
+
+body.dark{
+  background-color: #000000;
+  color: #ffffff;
 }
 
 #root {
@@ -29,11 +39,10 @@ body {
   height: 100vh;
   display: flex;
   flex-grow: 1;
-  background-color: #000000;
-
+  
 }
 
 .Home, .Login, .Register{
   width: 100%;
-  padding: 2rem;
+
 }
